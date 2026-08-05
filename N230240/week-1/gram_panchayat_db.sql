@@ -1,153 +1,70 @@
--- MySQL dump 10.13  Distrib 8.0.46, for Win64 (x86_64)
---
--- Host: localhost    Database: gram_panchayat_db
--- ------------------------------------------------------
--- Server version	8.0.46
+show databases;
+use  gram_panchayat_db;
+create table Citizen(citizen_id int primary key,full_name varchar(100) not null,date_of_birth date not null,gender varchar(10) not null,mobile_number varchar(15) unique not null,occupation varchar(50),village_name varchar(50)not null,is_active boolean not null);
+insert into Citizen values(101,"Ravi Kumar",'1995-06-15',"Male",986750001,"Farmer","Ramapuram",true);
+insert into Citizen values(102,"Lakshmi Devi",'1988-11-22',"FeMale",986750002,"Tailor","Ramapuram",true);
+insert into Citizen values(103,"Suresh Babu",'1992-03-10',"Male",986750003,"Shopkeeper","Seethampeta",true);
+insert into Citizen values(104,"Anjali Rao",'2000-08-05',"FeMale",986750004,"Student","Raamapuram",true);
+insert into Citizen values(105,"Kiran Kumar",'1985-01-18',"Male",986750005,"Electrician","Seethampeta",true);
+insert into Citizen values(106,"Meena Kumari",'1998-12-30',"FeMale",986750006,"Teacher","Lakshmipuram",false);
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+create table Certificate_Type(certificate_type_id int primary key,certificate_name varchar(100)unique not null,description varchar(200) not null,processing_days int not null,application_fee decimal(8,2) not null,is_available boolean not null);
+insert into Certificate_type values(1,"Residence Certificate","Certifies the declared place of residence",7,30,true);
+insert into Certificate_type values(2,"Birth Record Request","Request for a locally maintained birth record",5,20,true);
+insert into Certificate_type values(3,"Death Record Request","Request for a locally maintained death record",5,20,true);
+insert into Certificate_type values(4,"Family Member Certificate","Records declared family-member information",10,40,true);
+insert into Certificate_type values(5,"Property Certificate","Certificate related to locally maintained property certificate",15,50,true);
+insert into Certificate_type values(6,"No-Dues Certificate","Indicates applicable local dues status",7,25,false);
 
---
--- Table structure for table `certificate_application`
---
+create table Certificate_Application(application_id int primary key,citizen_id int not null,certificate_name varchar(100) not null,application_date date not null,purpose varchar(200) not null,application_status varchar(30) not null,fee_paid decimal(8,2) not null,reference_number varchar(30) unique not null);
+insert into Certificate_Application values(1001,101,"Residence Certificate","2026-07-01","Bank account documentation","Submitted",30,"GP20260001");
+insert into Certificate_Application values(1002,102,"Family member certificate","2026-07-02","Welfarae scheme application","Under Review",40,"GP20260002");
+insert into Certificate_Application values(1003,103,"Property certificate","2026-07-03","Property document","Submitted",50,"GP20260003");
+insert into Certificate_Application values(1004,104,"Residence Certificate","2026-07-04","College admision","Approved",30,"GP20260004");
+insert into Certificate_Application values(1005,105,"No-dues Certificate","2026-07-05","Local Service requirement","Under review",25,"GP20260005");
+insert into Certificate_Application values(1006,106,"Birth Record Request","2026-07-06","Personal documentation","Rejected",20,"GP20260006");
 
-DROP TABLE IF EXISTS `certificate_application`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `certificate_application` (
-  `application_id` int NOT NULL,
-  `citizen_id` int NOT NULL,
-  `certificate_name` varchar(100) NOT NULL,
-  `application_date` date NOT NULL,
-  `purpose` varchar(500) DEFAULT NULL,
-  `application_status` varchar(30) NOT NULL,
-  `fee_paid` decimal(8,2) NOT NULL,
-  `reference_number` varchar(30) NOT NULL,
-  `issued_date` date NOT NULL DEFAULT '2024-06-08',
-  PRIMARY KEY (`application_id`),
-  UNIQUE KEY `reference_number` (`reference_number`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+create table Panchayat_Office(office_id int primary key,office_name varchar(100) not null,village_name varchar(50) not null,pincode varchar(6) not null,contact_number varchar(15) unique,office_email varchar(100) unique,opening_time time not null,is_operational boolean not null);
+insert into Panchayat_Office values(1,"Ramapuram Gram Panchayat","Ramapuram",521101,086600001,"ramapuram@gp.example","09:00:00",true);
+insert into Panchayat_Office values(2,"Seethampeta Gram Panchayat","Seethampeta",521102,086600002,"seethampeta@gp.example","09:30:00",true);
+insert into Panchayat_Office values(3,"Lakshmipuram Gram Panchayat","Lakshmipuram",521103,086600003,"lakshmipuram@gp.example","09:00:00",true);
+insert into Panchayat_Office values(4,"Krishnapuram Gram Panchayat","Krishnapuram",521104,086600004,"krishnapuram@gp.example","10:00:00",true);
+insert into Panchayat_Office values(5,"Venkatapuram Gram Panchayat","Venkatapuram",521105,086600005,"venkatapuram@gp.example","09:30:00",true);
+insert into Panchayat_Office values(6,"Gopalapuram Gram Panchayat","Gopalapuram",521106,086600006,"gopalapuram@gp.example","09:00:00",false);
 
---
--- Dumping data for table `certificate_application`
---
 
-LOCK TABLES `certificate_application` WRITE;
-/*!40000 ALTER TABLE `certificate_application` DISABLE KEYS */;
-INSERT INTO `certificate_application` VALUES (1001,101,'Residence Certificate','2026-07-02','Bank account documentation','Under Review',30.00,'GP20260001','2024-06-08'),(1002,102,'Family member certificate','2026-07-02','Welfarae scheme application','Approved',40.00,'GP20260002','2024-06-08'),(1003,103,'Property certificate','2026-07-03','Property document','Submitted',50.00,'GP20260003','2024-06-08'),(1004,104,'Residence Certificate','2026-07-04','College admision','Approved',30.00,'GP20260004','2024-06-08'),(1005,105,'No-dues Certificate','2026-07-05','Local Service requirement','Under review',25.00,'GP20260005','2024-06-08'),(1006,106,'Birth Record Request','2026-07-06','Personal documentation','Rejected',20.00,'GP20260006','2024-06-08');
-/*!40000 ALTER TABLE `certificate_application` ENABLE KEYS */;
-UNLOCK TABLES;
+insert into Citizen values(107,"Apashyam kirikiri","204-07-16","Male",9876543210,"House husband","Ramayapalem",true);
+insert into Certificate_type values(7,"Income certificate","Certifies the income of the family anually",10,50,true);
+update Certificate_Application set application_status="Under Review" where application_id=1001;
+update Certificate_Application set application_status="Approved" where application_id=1002;
+update Citizen set occupation="Electrical Technician" where citizen_id=105;
+update Certificate_type set processing_days=12 where certificate_type_id=5;
+update Certificate_type set is_available=true where certificate_name="No-Dues Certificate";
+delete from Citizen where citizen_id=107;
 
---
--- Table structure for table `certificate_type`
---
+alter table Citizen add address varchar(200);
+alter table Certificate_Application add issued_date date not null default '2024-06-08';
+alter table Certificate_Application modify purpose varchar(500);
+alter table Panchayat_Office add closing_time time not null;
+  
+select * from Citizen;
+select *from Certificate_type;
+select * from Certificate_Application;
+select * from Panchayat_Office;
 
-DROP TABLE IF EXISTS `certificate_type`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `certificate_type` (
-  `certificate_type_id` int NOT NULL,
-  `certificate_name` varchar(100) NOT NULL,
-  `description` varchar(200) NOT NULL,
-  `processing_days` int NOT NULL,
-  `application_fee` decimal(8,2) NOT NULL,
-  `is_available` tinyint(1) NOT NULL,
-  PRIMARY KEY (`certificate_type_id`),
-  UNIQUE KEY `certificate_name` (`certificate_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+create table Temporary_Request(request_id int primary key,request_name varchar(100) not null,request_date date not null);
+insert into Temporary_Request values(1,"sdfas","1999-08-09");
+insert into Temporary_Request values(2,"qeewdbdfd","1993-08-09");
+insert into Temporary_Request values(3,"sreert","1996-08-09");
+select * from Temporary_Request;
+truncate Temporary_Request;
+drop table Temporary_Request;
 
---
--- Dumping data for table `certificate_type`
---
-
-LOCK TABLES `certificate_type` WRITE;
-/*!40000 ALTER TABLE `certificate_type` DISABLE KEYS */;
-INSERT INTO `certificate_type` VALUES (1,'Residence Certificate','Certifies the declared place of residence',7,30.00,1),(2,'Birth Record Request','Request for a locally maintained birth record',5,20.00,1),(4,'Family Member Certificate','Records declared family-member information',10,40.00,1),(5,'Property Certificate','Certificate related to locally maintained property certificate',12,50.00,1),(6,'No-Dues Certificate','Indicates applicable local dues status',7,25.00,1),(7,'Income certificate','Certifies the income of the family anually',10,50.00,1);
-/*!40000 ALTER TABLE `certificate_type` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `citizen`
---
-
-DROP TABLE IF EXISTS `citizen`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `citizen` (
-  `citizen_id` int NOT NULL,
-  `full_name` varchar(100) NOT NULL,
-  `date_of_birth` date NOT NULL,
-  `gender` varchar(10) NOT NULL,
-  `mobile_number` varchar(15) NOT NULL,
-  `occupation` varchar(50) DEFAULT NULL,
-  `village_name` varchar(50) NOT NULL,
-  `is_active` tinyint(1) NOT NULL,
-  `address` varchar(200) NOT NULL,
-  PRIMARY KEY (`citizen_id`),
-  UNIQUE KEY `mobile_number` (`mobile_number`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `citizen`
---
-
-LOCK TABLES `citizen` WRITE;
-/*!40000 ALTER TABLE `citizen` DISABLE KEYS */;
-INSERT INTO `citizen` VALUES (101,'Ravi Kumar','1995-06-15','Male','986750001','Farmer','Ramapuram',1,''),(102,'Lakshmi Devi','1988-11-22','FeMale','986750002','Tailor','Ramapuram',1,''),(104,'Anjali Rao','2000-08-05','FeMale','986750004','Student','Raamapuram',1,''),(105,'Kiran Kumar','1985-01-18','Male','986750005','Electrical Technician','Seethampeta',1,''),(106,'Meena Kumari','1998-12-30','FeMale','986750006','Teacher','Lakshmipuram',0,'');
-/*!40000 ALTER TABLE `citizen` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `panchayat_office`
---
-
-DROP TABLE IF EXISTS `panchayat_office`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `panchayat_office` (
-  `office_id` int NOT NULL,
-  `office_name` varchar(100) NOT NULL,
-  `village_name` varchar(50) NOT NULL,
-  `pincode` varchar(6) NOT NULL,
-  `contact_number` varchar(15) DEFAULT NULL,
-  `office_email` varchar(100) DEFAULT NULL,
-  `opening_time` time NOT NULL,
-  `is_operational` tinyint(1) NOT NULL,
-  `closing_time` time NOT NULL,
-  PRIMARY KEY (`office_id`),
-  UNIQUE KEY `contact_number` (`contact_number`),
-  UNIQUE KEY `office_email` (`office_email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `panchayat_office`
---
-
-LOCK TABLES `panchayat_office` WRITE;
-/*!40000 ALTER TABLE `panchayat_office` DISABLE KEYS */;
-INSERT INTO `panchayat_office` VALUES (1,'Ramapuram Gram Panchayat','Ramapuram','521101','86600001','ramapuram@gp.example','09:00:00',1,'00:00:00'),(2,'Seethampeta Gram Panchayat','Seethampeta','521102','86600002','seethampeta@gp.example','09:30:00',1,'00:00:00'),(3,'Lakshmipuram Gram Panchayat','Lakshmipuram','521103','86600003','lakshmipuram@gp.example','09:00:00',1,'00:00:00'),(5,'Venkatapuram Gram Panchayat','Venkatapuram','521105','86600005','venkatapuram@gp.example','09:30:00',1,'00:00:00'),(6,'Gopalapuram Gram Panchayat','Gopalapuram','521106','86600006','gopalapuram@gp.example','09:00:00',0,'00:00:00');
-/*!40000 ALTER TABLE `panchayat_office` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2026-07-21 14:27:25
+insert into Citizen values(101,"asdfasdf","2004-02-09","Male",374829272,"goldsmith","nellore",false,"asdf");
+/*DUPLICATE ENTRY '101' FOR KEY 'CITIZEN.PRIMARY'*/
+insert into Citizen values(123,"asdfasdf","2004-02-09","Male",986750001,"goldsmith","nellore",false,"asdf");
+/*Duplicate entry '986750001' for 'cirtizen.mobile_number'*/
+insert into Certificate_type values(8,"asdfsdfre",34,29,false);
+/*column count doesnot math value count at row 1*/
+insert into Certificate_Application values(1007,107,"Caste Certificate","2026-07-07","Personal Documnetation","Approved",55,"GP20260001","2024-06-08");
+/*Duplicate entry 'GP20260001' for 'citizen_application.reference_number'*/
