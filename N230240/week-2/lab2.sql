@@ -1,26 +1,16 @@
 use gram_panchayat_db;
 show tables;
-select upper(full_name) from gram_panchayat;
-select lower(village_name) from gram_panchayat;
-select length(full_name) from gram_panchayat;
-select concat(full_name,village_name) from gram_panchayat;
-select substring(full_name,1,locate(' ',full_name)-1) from gram_panchayat;
-select left(full_name,5) from gram_panchayat;
-select right(full_name,5) from gram_panchayat;
-select replace(full_name,"ravi kumar","rahul kumar") from gram_panchayat where citizen_id = 1;
-
-
 -- now the program starts 
 -- built in string methods
-select upper(full_name) from gram_panchayat;
-select lower(village_name) from gram_panchayat;
-select length(full_name) from gram_panchayat;
-select substring(reference_number,1,4) from certificate_application;
-select concat(full_name," -- ", village_name) from gram_panchayat;
-select replace(certificate_name,"certificate","Cert.") from certificate_application;
-select trim(certificate_name) from certificate_application;
-select substring(full_name,1,locate(' ',full_name)-1) from gram_panchayat;
-select concat("citizen : ",full_name," village :",village_name) from gram_panchayat;
+select upper(full_name) as Full_name  from Citizen;
+select lower(village_name) as village_name from Citizen;
+select Full_name,length(Full_name) as name_LENGTH from Citizen;
+select reference_number,LEFT(reference_number,4) as first_four from certificate_application;
+select concat(full_name,"-", village_name) as details from Citizen;
+select replace(certificate_name,"Certificate","Cert") from certificate_Type;
+select trim(certificate_name) as certificate_name from certificate_Type;
+select substring(full_name,1,locate(' ',full_name)-1) from Citizen;
+select concat("citizen : ",full_name," village :",village_name) from Citizen;
 select * from certificate_application where left(reference_number,6) = "GP2026";
 select * from certificate_application;
 
@@ -31,27 +21,26 @@ select * from certificate_type;
 alter table certificate_application modify column fee_paid float(10);
 select * from certificate_application;
 select application_fee , round(application_fee) from certificate_type;
-select processing_days , abs(processing_days) from certificate_type where processing_days = 10;
-select processing_days , power(processing_days,2) from certificate_type;
-select processing_days , mod(processing_days,3) from certificate_type;
-select application_fee , round(application_fee,1) from certificate_type;
-select application_fee , ceil(application_fee) from certificate_type;
-select application_fee , floor(application_fee) from certificate_type;
+select processing_days , abs(processing_days-10) as absolute_value from certificate_type ;
+select processing_days , power(processing_days,2) as square from certificate_type;
+select processing_days , mod(processing_days,3) as remainder from certificate_type;
+select application_fee , round(application_fee,1) as rounded_fee from certificate_type;
+select application_fee , ceil(application_fee) as ceiling_fee , floor(application_fee) as floor_value from certificate_type;
 select floor(1+rand()*100);
-select processing_days,sqrt(processing_days) from certificate_type;
-select certificate_name, processing_days, (processing_days * 2) from certificate_type;
+select processing_days,sqrt(processing_days) as square_root from certificate_type;
+select certificate_name, processing_days, (processing_days * 2) as doubled_processing_days from certificate_type;
 
 -- date functions
 
-select curdate();
-select now();
-select application_date,year(application_date)  from certificate_application;
-select application_date,month(application_date)  from certificate_application;
-select application_date,day(application_date) from certificate_application;
+select curdate()as today_date;
+select now() as current_date_time;
+select application_date,year(application_date) as year from certificate_application;
+select application_date,month(application_date) as month from certificate_application;
+select application_date,day(application_date) as day from certificate_application;
 select date_add(application_date,interval processing_days day) as expected_date_of_issue from certificate_application ca join certificate_type ct on ca.certificate_name = ct.certificate_name;
-select date_add(application_date , interval 30 day) from certificate_application;
-select date_sub(application_date , interval 7 day) from certificate_application;
-select datediff(curdate(),application_date) from certificate_application;
+select date_add(application_date , interval 30 day) as after_30_days from certificate_application;
+select date_sub(application_date , interval 7 day) as before_30 from certificate_application;
+select datediff(curdate(),application_date)as date_diff from certificate_application;
 select * from certificate_application where( year(curdate()) = year(application_date));
 
 
